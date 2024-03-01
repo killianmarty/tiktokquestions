@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Concatenate Videos</title>
+  <title>Générateur de TikTok</title>
 </head>
 <body>
-  <h1>Concatenate Videos</h1>
+  <h1>Générateur de TikTok</h1>
   <form action="/concatenate" method="POST">
-    <label for="remoteFolder">Nom du dossier distant contenant les vidéos :</label>
+    <label for="remoteFolder">Type :</label>
     <input type="text" id="remoteFolder" name="remoteFolder" required><br><br>
-    <label for="numVideos">Nombre de vidéos à concaténer :</label>
+    <label for="numVideos">Nombre de questions :</label>
     <input type="number" id="numVideos" name="numVideos" min="1" required><br><br>
-    <button type="submit">Concaténer</button>
+    <button type="submit">Générer</button>
   </form>
 </body>
 </html>
