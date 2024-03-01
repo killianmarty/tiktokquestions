@@ -4,6 +4,34 @@
 #include <dirent.h>
 #include <time.h>
 
+void swap(int* xp, int* yp) 
+{ 
+    int temp = *xp; 
+    *xp = *yp; 
+    *yp = temp; 
+} 
+  
+// Function to perform Selection Sort 
+void selectionSort(int arr[], int n) 
+{ 
+    int i, j, min_idx; 
+  
+    // One by one move boundary of 
+    // unsorted subarray 
+    for (i = 0; i < n - 1; i++) { 
+        // Find the minimum element in 
+        // unsorted array 
+        min_idx = i; 
+        for (j = i + 1; j < n; j++) 
+            if (arr[j] < arr[min_idx]) 
+                min_idx = j; 
+  
+        // Swap the found minimum element 
+        // with the first element 
+        swap(&arr[min_idx], &arr[i]); 
+    } 
+} 
+
 void concatenate_videos(const char *input_videos[], int num_videos, const char *output_filename) {
     char cmd[1024];
     char concat_list[4096] = "";
@@ -27,6 +55,16 @@ void concatenate_videos(const char *input_videos[], int num_videos, const char *
 
     // Delete the temporary file
     remove("list.txt");
+}
+
+int isin(int search, int * list, int size){
+    for (int i = 0; i < size; ++i)
+    {
+        if(list[i]==search){
+            return 1;
+        }
+    }
+    return 0;
 }
 
 void create_video(const char *folder, int number) {
@@ -59,12 +97,14 @@ void create_video(const char *folder, int number) {
             selected_indices[i] = rand() % total_videos;
         }
 
+        //selectionSort(selected_indices, number);
+
         // Open the directory again to select videos using the generated indices
         dir = opendir(folder);
         int current_index = 0;
         while ((ent = readdir(dir)) != NULL) {
             if (strcmp(ent->d_name, ".") != 0 && strcmp(ent->d_name, "..") != 0) {
-                if (current_index == selected_indices[num_videos]) {
+                if (isin(current_index, selected_indices, number)) {
                     char video_path[1024];
                     sprintf(video_path, "%s/%s", folder, ent->d_name);
                     videos_selectionnees[num_videos++] = strdup(video_path);
