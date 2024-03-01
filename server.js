@@ -33,7 +33,8 @@ app.post('/concatenate', (req, res) => {
   exec(`./main ${remoteFolder} ${numVideos}`, (error, stdout, stderr) => {
     
     // Renvoyer la vidéo concaténée au client
-    const videoPath = 'outputs/output.mp4'; // Remplacez par le chemin vers votre fichier vidéo
+    res.redirect('output.mp4');
+    /*const videoPath = 'outputs/output.mp4'; // Remplacez par le chemin vers votre fichier vidéo
     const videoStat = fs.statSync(videoPath);
     const fileSize = videoStat.size;
     const range = req.headers.range;
@@ -61,7 +62,7 @@ app.post('/concatenate', (req, res) => {
         };
         res.writeHead(200, head);
         fs.createReadStream(videoPath).pipe(res);
-    }
+    }*/
   });
 });
 
