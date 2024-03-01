@@ -33,7 +33,8 @@ app.post('/concatenate', (req, res) => {
   exec(`./main ${remoteFolder} ${numVideos}`, (error, stdout, stderr) => {
     
     // Renvoyer la vidéo concaténée au client
-    res.redirect('output.mp4');
+    //res.redirect('output.mp4');
+    res.render('video');
   });
 });
 
