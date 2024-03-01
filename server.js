@@ -8,7 +8,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'outputs')));
 
-const port = 3000;
+const port = 8080;
 
 // Définir le moteur de vue et le répertoire des vues
 app.set('views', path.join(__dirname, 'views'));
