@@ -35,7 +35,21 @@ void selectionSort(int arr[], int n)
 void concatenate_videos(const char *input_videos[], int num_videos, const char *output_filename) {
     char cmd[1024];
     char concat_list[4096] = "";
-    
+
+    // Add audio to each video, replacing the existing audio
+    for (int i = 1; i < num_videos-1; i++) {
+        // Create temporary video with replaced audio
+        sprintf(cmd, "ffmpeg -hide_banner -loglevel error -y -i \"%s\" -i \"%s\" -c:v copy -map 0:v -map 1:a -c:a aac -strict experimental -shortest \"%s_temp.mp4\"", input_videos[i], "sound/question.mp3", input_videos[i]);
+        system(cmd);
+
+        // Delete the original video
+        remove(input_videos[i]);
+
+        char renamed_file[1024];
+        sprintf(renamed_file, "%s_temp.mp4", input_videos[i]);
+        rename(renamed_file, input_videos[i]);
+    }
+
     // Create a temporary file to hold the list of videos to concatenate
     FILE *list_file = fopen("list.txt", "w");
     if (!list_file) {
@@ -45,16 +59,19 @@ void concatenate_videos(const char *input_videos[], int num_videos, const char *
 
     // Write the list of videos to the temporary file
     for (int i = 0; i < num_videos; i++) {
+        
         fprintf(list_file, "file '%s'\n", input_videos[i]);
+        
     }
     fclose(list_file);
 
     // Concatenate the videos using FFmpeg
-    sprintf(cmd, "ffmpeg -y -f concat -safe 0 -i list.txt -c copy \"%s\"", output_filename);
+    sprintf(cmd, "ffmpeg -hide_banner -loglevel error -y -f concat -safe 0 -i list.txt -c copy \"%s\"", output_filename);
     system(cmd);
 
     // Delete the temporary file
     remove("list.txt");
+
 }
 
 int isin(int search, int * list, int size){
@@ -85,7 +102,7 @@ void create_video(const char *folder, int number) {
         // Count the total number of videos in the folder
         int total_videos = 0;
         while ((ent = readdir(dir)) != NULL) {
-            if (strcmp(ent->d_name, ".") != 0 && strcmp(ent->d_name, "..") != 0) {
+            if (strcmp(ent->d_name, ".") != 0 && strcmp(ent->d_name, "..") != 0 && strcmp(ent->d_name, "const") != 0 && strcmp(ent->d_name, "tmp") != 0) {
                 total_videos++;
             }
         }
@@ -103,7 +120,7 @@ void create_video(const char *folder, int number) {
         dir = opendir(folder);
         int current_index = 0;
         while ((ent = readdir(dir)) != NULL) {
-            if (strcmp(ent->d_name, ".") != 0 && strcmp(ent->d_name, "..") != 0) {
+            if (strcmp(ent->d_name, ".") != 0 && strcmp(ent->d_name, "..") != 0 && strcmp(ent->d_name, "const") != 0 && strcmp(ent->d_name, "tmp") != 0) {
                 if (isin(current_index, selected_indices, number)) {
                     char video_path[1024];
                     sprintf(video_path, "%s/%s", folder, ent->d_name);
